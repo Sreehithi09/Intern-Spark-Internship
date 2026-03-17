@@ -1,0 +1,200 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: black;
+  color: white;
+   background-image: url('image.jpg');
+    background-size: cover;        /* makes it full screen */
+    background-position: center;   /* centers image */
+    background-repeat: no-repeat;  /* prevents repeating */
+    height: 100vh;
+    margin: 0;
+}
+
+#navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  z-index: 10;
+}
+
+.logo {
+  color: red;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.nav-right {
+  display: flex;
+  gap: 15px;
+}
+
+select {
+  background: transparent;
+  color: white;
+  border: 1px solid gray;
+  padding: 5px 10px;
+}
+
+.signin {
+  background: red;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    overflow: hidden; /* ensures blur doesn't overflow */
+}
+
+/* Add blurred background */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('your-background.jpg') center/cover no-repeat;
+    filter: blur(8px); /* adjust blur here */
+    z-index: 0;
+}
+
+/* Ensure content is above the blur */
+.hero .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Optional: dark overlay for better text visibility */
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
+    z-index: 0;
+}
+
+.hero h1 {
+  font-size: 3rem;
+}
+
+.email-box {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.email-box input {
+  flex: 1;
+  padding: 15px;
+}
+
+.email-box button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 15px 20px;
+}
+
+/* Movies Row */
+.movies {
+  padding: 40px;
+}
+
+.movies h2 {
+  margin-bottom: 20px;
+}
+
+.movie-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+}
+
+.movie-card {
+  position: relative;
+  min-width: 180px;
+  transition: transform 0.3s;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.movie-card span {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 80px;
+  color: transparent;
+  -webkit-text-stroke: 2px white;
+}
+
+.movie-card:hover {
+  transform: scale(1.1);
+}
+
+/* Scrollbar hide */
+.movie-row::-webkit-scrollbar {
+  display: none;
+}
+
+.movies {
+    padding: 20px;
+}
+
+.movies h2 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.movie-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto; /* horizontal scroll if too many movies */
+    padding-bottom: 10px;
+}
+
+.movie-card {
+    min-width: 200px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.movie-card:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media(max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .email-box {
+    flex-direction: column;
+  }
+}
