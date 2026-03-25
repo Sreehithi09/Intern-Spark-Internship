@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Data Fetch Project</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .search-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      width: 250px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .loading, .error {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Pokemon Search App</h1>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search Pokemon...">
+  <button onclick="fetchData()">Search</button>
+</div>
+
+<div id="status" class="loading"></div>
+<div id="container" class="grid"></div>
+
+<script>
+  const container = document.getElementById("container");
+  const statusDiv = document.getElementById("status");
+
+  async function fetchData() {
+    const query = document.getElementById("searchInput").value.toLowerCase();
+
+    container.innerHTML = "";
+    statusDiv.textContent = "Loading...";
+
+    try {
+      let url = "https://pokeapi.co/api/v2/pokemon?limit=50";
+
+      if (query) {
+        url = `https://pokeapi.co/api/v2/pokemon/${query}`;
+        const res = await fetch(url);
+
+        if (!res.ok) throw new Error("Pokemon not found");
+
+        const data = await res.json();
+        displaySingle(data);
+        statusDiv.textContent = "";
+        return;
+      }
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const promises = data.results.map(p => fetch(p.url).then(r => r.json()));
+      const results = await Promise.all(promises);
+
+      displayData(results);
+      statusDiv.textContent = "";
+
+    } catch (error) {
+      statusDiv.textContent = "Error: " + error.message;
+    }
+  }
+
+  function displayData(data) {
+    container.innerHTML = "";
+
+    data.forEach(pokemon => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <h3>${pokemon.name}</h3>
+        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
+        <p>Type: ${pokemon.types.map(t => t.type.name).join(", ")}</p>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function displaySingle(pokemon) {
+    container.innerHTML = "";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h2>${pokemon.name}</h2>
+      <img src="${pokemon.sprites.front_default}" />
+      <p><strong>Height:</strong> ${pokemon.height}</p>
+      <p><strong>Weight:</strong> ${pokemon.weight}</p>
+      <p><strong>Type:</strong> ${pokemon.types.map(t => t.type.name).join(", ")}</p>
+    `;
+
+    container.appendChild(card);
+  }
+
+  // Load initial data
+  fetchData();
+</script>
+
+</body>
+</html>
